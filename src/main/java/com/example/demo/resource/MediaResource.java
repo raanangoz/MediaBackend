@@ -8,6 +8,7 @@ import com.example.demo.model.Media;
 import com.example.demo.service.MediaService;
 
 import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("media/")
@@ -26,18 +27,14 @@ public class MediaResource {
 
     @GetMapping("/findBook/{name}")
     public ResponseEntity<Media> getMediaByName (@PathVariable("name") String name) {
-        Media media = MediaService.findMediaByName(name);
+        Media media;
+        media = MediaService.findMediaByName(name);
         return new ResponseEntity<>(media, HttpStatus.OK);
-    }
 
-    @GetMapping("/findAuthor/{author}")
-    public ResponseEntity<Media> custonFindAuth (@PathVariable("author") String name) {
-        Media media = MediaService.custonFindAuth(name);
-        return new ResponseEntity<>(media, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Media> addMedia(@RequestBody Media media) {
+    public ResponseEntity<Media> addMedia(@RequestBody Media media) throws Exception {
         Media newMedia = MediaService.addMedia(media);
         return new ResponseEntity<>(newMedia, HttpStatus.CREATED);
     }
@@ -50,8 +47,8 @@ public class MediaResource {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteMedia(@PathVariable("id") Long id) {
-        MediaService.deleteMedia(id);
+    public ResponseEntity<?> deleteMedia(@PathVariable("id") int id) {
+        MediaService.deleteMediaById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

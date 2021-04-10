@@ -7,10 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface MediaRepo extends JpaRepository<Media, Long> {
-    void deleteMediaById(Long id);
+    void deleteMediaById(int id);
 
     Optional<Media> findMediaByName(String name);
 
-    @Query("SELECT p FROM Media p WHERE LOWER(p.author) = LOWER(:name)")
-    Optional<Media> custonFindAuth(String name);
 }

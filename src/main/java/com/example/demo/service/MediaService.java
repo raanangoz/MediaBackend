@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.MediaNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.Media;
 import com.example.demo.repo.MediaRepo;
 
 import javax.transaction.Transactional;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -19,9 +21,15 @@ public class MediaService {
         this.MediaRepo = MediaRepo;
     }
 
-    public Media addMedia(Media media) {
-//        Media.setMediaCode(UUID.randomUUID().toString());
-        return MediaRepo.save(media);
+    public Media addMedia(Media media) throws Exception {
+        try {
+            return MediaRepo.save(media);
+        }
+        catch(Exception e){
+            throw new Exception();
+        }
+
+
     }
 
     public List<Media> findAllMedias() {
@@ -34,14 +42,14 @@ public class MediaService {
 
     public Media findMediaByName(String name) {
         return MediaRepo.findMediaByName(name)
-                .orElseThrow(() -> new UserNotFoundException("Media was not found"));
+                .orElseThrow(() -> new MediaNotFoundException(name));
     }
-    public Media custonFindAuth(String name) {
-        return MediaRepo.custonFindAuth(name)
-                .orElseThrow(() -> new UserNotFoundException("Media was not found"));
-    }
+//    public Media custonFindAuth(String name) {
+//        return MediaRepo.custonFindAuth(name)
+//                .orElseThrow(() -> new MediaNotFoundException("Media was not found"));
+//    }
 
-    public void deleteMedia(Long id){
+    public void deleteMediaById(int id){
         MediaRepo.deleteMediaById(id);
     }
 }

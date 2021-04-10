@@ -15,9 +15,10 @@ public class Media implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
-    private Long id;
-    @NotNull
+    private int id;
+    @Column(nullable = false)
     private String author;
+    @Column(name = "name", length = 50, unique = true)
     private String name;
     private String type;
     private String userBorrowed;
@@ -27,7 +28,7 @@ public class Media implements Serializable {
      * constructors
      */
     public Media() { }
-    public Media(Long id, String name, String type, String userBorrowed, int timesBorrowed) {
+    public Media(int id, String name, String type, String userBorrowed, int timesBorrowed) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -44,7 +45,7 @@ public class Media implements Serializable {
     public void setAuthor(String author) {
         this.author = author;
     }
-    public Long getId() {
+    public int getId() {
         return id;
     }
     public String getName() {
@@ -59,7 +60,7 @@ public class Media implements Serializable {
     public int getTimesBorrowed() {
         return timesBorrowed;
     }
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
     public void setName(String name) {
