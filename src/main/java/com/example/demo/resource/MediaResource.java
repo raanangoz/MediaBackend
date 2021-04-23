@@ -1,6 +1,7 @@
 
 package com.example.demo.resource;
 
+import com.example.demo.exception.MediaAlreadyExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class MediaResource {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Media> addMedia(@RequestBody Media media) throws Exception {
+    public ResponseEntity<Media> addMedia(@RequestBody Media media) throws Exception, MediaAlreadyExistException {
         Media newMedia = MediaService.addMedia(media);
         return new ResponseEntity<>(newMedia, HttpStatus.CREATED);
     }

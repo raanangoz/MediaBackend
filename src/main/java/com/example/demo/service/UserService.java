@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Media;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.exception.UserNotFoundException;
@@ -19,13 +20,13 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
+    public List<User> findAllUsers() {
+        return userRepo.findAll();
+    }
+
     public User addUser(User user) {
 //        User.setUserCode(UUID.randomUUID().toString());
-        return userRepo.save(user);
-    }
-    public boolean validateUser(){
-        System.out.println("correct details");
-        return true;
 
+        return userRepo.save(user);
     }
 }

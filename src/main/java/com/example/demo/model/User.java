@@ -1,18 +1,32 @@
 package com.example.demo.model;
 
+import com.example.demo.Security.PasswordConfig;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
+@Table(name = "user")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     private Long id;
     private String email;
-    private String firstName;
-    private String lastName;
     private String password;
     private String username;
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(name = "user_groups",
+            joinColumns ={@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "group_id")}
+            )
+    private Set<Group> userGroups = new HashSet<>();
 
     public String getUsername() {
         return username;
@@ -24,12 +38,11 @@ public class User implements Serializable {
 
     public User(){
     }
-    public User(Long id, String email, String firstName, String lastName, String password) {
+    public User(Long id, String email, String password, String username) {
         this.id = id;
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.password = password;
+        this.username = username;
     }
 
     @Override
@@ -37,8 +50,8 @@ public class User implements Serializable {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
                 '}';
     }
 
@@ -58,27 +71,27 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+
+        PasswordEncoder p = new BCryptPasswordEncoder();
+
+        this.password = p.encode(password);
+    }
+
+    public Set<Group> getUserGroups() {
+        return userGroups;
+    }
+    public void addUserGroups(Group group){
+        userGroups.add(group);
+        group.getUsers().add(this);
+    }
+
+    public void removeUserGroups(Group group){
+        userGroups.remove(group);
+        group.getUsers().remove(this);
     }
 }

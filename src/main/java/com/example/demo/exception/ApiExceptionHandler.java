@@ -14,8 +14,8 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-@ControllerAdvice
 
+@ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {MediaNotFoundException.class})
@@ -30,6 +30,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleGeneralException(Exception e) {
         return new ResponseEntity<Object>(e.getMessage(), HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(value = {MediaAlreadyExistException.class})
+    public ResponseEntity<Object> handleMediaAlreadyExistException(MediaAlreadyExistException e) {
+        return new ResponseEntity<>(e.getMessage(), e.getStatus());
+    }
+
 }
 
 

@@ -1,47 +1,40 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.MediaAlreadyExistException;
 import com.example.demo.exception.MediaNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import com.example.demo.model.Media;
 import com.example.demo.repo.MediaRepo;
 
 import javax.transaction.Transactional;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class MediaService {
-    private final MediaRepo MediaRepo;
+    private final MediaRepo mediaRepo;
 
     @Autowired
     public MediaService(MediaRepo MediaRepo) {
-        this.MediaRepo = MediaRepo;
+        this.mediaRepo = MediaRepo;
     }
 
-    public Media addMedia(Media media) throws Exception {
-        try {
-            return MediaRepo.save(media);
-        }
-        catch(Exception e){
-            throw new Exception();
-        }
-
-
+    public Media addMedia(Media media) {
+        return mediaRepo.save(media);
     }
 
     public List<Media> findAllMedias() {
-        return MediaRepo.findAll();
+        return mediaRepo.findAll();
     }
 
     public Media updateMedia(Media media) {
-        return MediaRepo.save(media);
+        return mediaRepo.save(media);
     }
 
     public Media findMediaByName(String name) {
-        return MediaRepo.findMediaByName(name)
+        return mediaRepo.findMediaByName(name)
                 .orElseThrow(() -> new MediaNotFoundException(name));
     }
 //    public Media custonFindAuth(String name) {
@@ -50,6 +43,6 @@ public class MediaService {
 //    }
 
     public void deleteMediaById(int id){
-        MediaRepo.deleteMediaById(id);
+        mediaRepo.deleteMediaById(id);
     }
 }
